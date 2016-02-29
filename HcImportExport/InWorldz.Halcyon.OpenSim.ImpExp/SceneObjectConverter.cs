@@ -105,36 +105,76 @@ namespace InWorldz.Halcyon.OpenSim.ImpExp
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="osRootPart"></param>
+        /// <param name="osPart"></param>
         /// <returns></returns>
-        private SceneObjectPartSnapshot ConvertOpenSimPartToPartSnapshot(dynamic osRootPart)
+        private SceneObjectPartSnapshot ConvertOpenSimPartToPartSnapshot(dynamic osPart)
         {
+            //we need server weight and streaming cost
+
             SceneObjectPartSnapshot snap = new SceneObjectPartSnapshot
             {
-                AngularVelocity = new Vector3(osRootPart.AngularVelocity.X, osRootPart.AngularVelocity.Y, osRootPart.AngularVelocity.Z),
-                AngularVelocityTarget = new Vector3(osRootPart.AngularVelocity.X, osRootPart.AngularVelocity.Y, osRootPart.AngularVelocity.Z),
-                BaseMask = osRootPart.BaseMask,
-                Category = osRootPart.Category,
-                ClickAction = osRootPart.ClickAction,
-                CollisionSound = osRootPart.CollisionSound.Guid,
-                CollisionSoundVolume = osRootPart.CollisionSoundVolume,
-                CreationDate = osRootPart.CreationDate,
-                CreatorId = m_creatorOverride == Guid.Empty ? osRootPart.CreatorID.Guid : m_creatorOverride,
-                Description = osRootPart.Description,
-                EveryoneMask = osRootPart.EveryoneMask,
-                Flags = osRootPart.Flags,
+                AngularVelocity = new Vector3(osPart.AngularVelocity.X, osPart.AngularVelocity.Y, osPart.AngularVelocity.Z),
+                AngularVelocityTarget = new Vector3(osPart.AngularVelocity.X, osPart.AngularVelocity.Y, osPart.AngularVelocity.Z),
+                BaseMask = osPart.BaseMask,
+                Category = osPart.Category,
+                ClickAction = osPart.ClickAction,
+                CollisionSound = osPart.CollisionSound.Guid,
+                CollisionSoundVolume = osPart.CollisionSoundVolume,
+                CreationDate = osPart.CreationDate,
+                CreatorId = m_creatorOverride == Guid.Empty ? osPart.CreatorID.Guid : m_creatorOverride,
+                Description = osPart.Description,
+                EveryoneMask = osPart.EveryoneMask,
+                Flags = osPart.Flags,
                 FromItemId = Guid.Empty,
-                GroupId = osRootPart.GroupID.Guid,
-                GroupMask = osRootPart.GroupMask,
-                GroupPosition = osRootPart.GroupPosition,
-                HoverText = osRootPart.Text,
-                Id = osRootPart.UUID.Guid,
-                Inventory = ExtractSOPInventorySnapshot(osRootPart),
-                OwnerId = m_ownerOverride == Guid.Empty ? osRootPart.OwnerID.Guid : m_ownerOverride,
+                GroupId = osPart.GroupID.Guid,
+                GroupMask = osPart.GroupMask,
+                GroupPosition = osPart.GroupPosition,
+                HoverText = osPart.Text,
+                Id = osPart.UUID.Guid,
+                Inventory = ExtractSOPInventorySnapshot(osPart),
+                KeyframeAnimation = ExtractSOPKFASnapshot(osPart),
+                LastOwnerId = osPart.LastOwnerID.Guid,
+                LinkNumber = osPart.LinkNum,
+                LocalId = osPart.LocalId,
+                Material = (Material)osPart.Material,
+                MediaUrl = osPart.MediaUrl,
+                Name = osPart.Name,
+                NextOwnerMask = osPart.NextOwnerMask,
+                ObjectFlags = (PrimFlags)osPart.ObjectFlags,
+                ObjectSaleType = osPart.ObjectSaleType,
+                OffsetPosition = osPart.OffsetPosition,
+                OwnerMask = osPart.OwnerMask,
+                OwnershipCost = osPart.OwnershipCost,
+                ParentId = osPart.ParentID,
+                ParticleSystem = osPart.ParticleSystem,
+                PassTouches = osPart.PassTouches,
+                PayPrice = osPart.PayPrice,
+                RegionHandle = osPart.RegionHandle,
+                RotationOffset = new Quaternion(osPart.RotationOffset.X, osPart.RotationOffset.Y, osPart.RotationOffset.Z, osPart.RotationOffset.W),
+                SalePrice = osPart.SalePrice,
+                Scale = osPart.Scale,
+                ScriptAccessPin = osPart.ScriptAccessPin,
+                ServerWeight = 1,
+                StreamingCost = 1,
+                Shape = ExtractSOPBaseShape(osPart),
 
+                OwnerId = m_ownerOverride == Guid.Empty ? osPart.OwnerID.Guid : m_ownerOverride,
+                
             };
 
             return snap;
+        }
+
+        private PrimShapeSnapshot ExtractSOPBaseShape(dynamic osPart)
+        {
+            return null;
+        }
+
+        private KeyframeAnimationSnapshot ExtractSOPKFASnapshot(dynamic osPart)
+        {
+            //there are several private fields inside the OS KFM class
+            //that make it impossible to extract through public members
+            return null;
         }
 
         private TaskInventorySnapshot ExtractSOPInventorySnapshot(dynamic osPart)
@@ -165,7 +205,21 @@ namespace InWorldz.Halcyon.OpenSim.ImpExp
                 CurrentPermissions = osTaskItem.CurrentPermissions,
                 Description = osTaskItem.Description,
                 EveryonePermissions = osTaskItem.EveryonePermissions,
-                Flags = osTaskItem.Flags
+                Flags = osTaskItem.Flags,
+                GroupId = osTaskItem.GroupID,
+                GroupPermissions = osTaskItem.GroupPermissions,
+                InvType = osTaskItem.InvType,
+                ItemId = osTaskItem.ItemID,
+                LastOwnerId = osTaskItem.LastOwnerID,
+                Name = osTaskItem.Name,
+                NextOwnerPermissions = osTaskItem.NextPermissions,
+                OldItemId = osTaskItem.OldItemID.Guid,
+                OwnerId = osTaskItem.OwnerID.Guid,
+                ParentId = osTaskItem.ParentID.Guid,
+                ParentPartId = osTaskItem.ParentPartID.Guid,
+                PermsGranter = osTaskItem.PermsGranter.Guid,
+                PermsMask = osTaskItem.PermsMask,
+                Type = osTaskItem.Type
             };
 
             return tii;
