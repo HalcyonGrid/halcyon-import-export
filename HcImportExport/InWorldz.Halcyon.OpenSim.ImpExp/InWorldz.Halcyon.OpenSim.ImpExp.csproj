@@ -55,9 +55,17 @@
     <Reference Include="InWorldz.Region.Data.Thoosa">
       <HintPath>..\..\..\halcyon\bin\InWorldz.Region.Data.Thoosa.dll</HintPath>
     </Reference>
+    <Reference Include="OpenMetaverse, Version=0.0.0.28165, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\halcyon\bin\OpenMetaverse.dll</HintPath>
+    </Reference>
     <Reference Include="OpenMetaverseTypes, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\halcyon\bin\OpenMetaverseTypes.dll</HintPath>
+    </Reference>
+    <Reference Include="OpenSim.Framework, Version=0.6.5.31174, Culture=neutral, processorArchitecture=AMD64">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\halcyon\bin\OpenSim.Framework.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />

@@ -31,11 +31,12 @@
 using AppDomainToolkit;
 using InWorldz.Region.Data.Thoosa.Serialization;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using OpenMetaverse;
+using OpenSim.Framework;
+using System.Collections.Generic;
 
 namespace InWorldz.Halcyon.OpenSim.ImpExp
 {
@@ -167,7 +168,64 @@ namespace InWorldz.Halcyon.OpenSim.ImpExp
 
         private PrimShapeSnapshot ExtractSOPBaseShape(dynamic osPart)
         {
-            return null;
+            return new PrimShapeSnapshot
+            {
+                ExtraParams = osPart.Shape.ExtraParams,
+                FlexiDrag = osPart.Shape.FlexiDrag,
+                FlexiEntry = osPart.Shape.FlexiEntry,
+                FlexiForceX = osPart.Shape.FlexiForceX,
+                FlexiForceY = osPart.Shape.FlexiForceY,
+                FlexiForceZ = osPart.Shape.FlexiForceZ,
+                FlexiGravity = osPart.Shape.FlexiGravity,
+                FlexiSoftness = osPart.Shape.FlexiSoftness,
+                FlexiTension = osPart.Shape.FlexiTension,
+                FlexiWind = osPart.Shape.FlexiWind,
+                HighLODBytes = osPart.Shape.HighLODBytes,
+                HollowShape = (global::OpenSim.Framework.HollowShape)(int)osPart.Shape.HollowShape,
+                LightColor = new float[] { osPart.Shape.LightColorR, osPart.Shape.LightColorG,
+                    osPart.Shape.LightColorB, osPart.Shape.LightColorA },
+                LightCutoff = osPart.Shape.LightCutoff,
+                LightEntry = osPart.Shape.LightEntry,
+                LightIntensity = osPart.Shape.LightIntensity,
+                LightRadius = osPart.Shape.LightRadius,
+                LowestLODBytes = osPart.Shape.LowestLODBytes,
+                LowLODBytes = osPart.Shape.LowLODBytes,
+                MediaList = ExtractMediaEntrySnapshot(osPart),
+                MidLODBytes = osPart.Shape.MidLODBytes,
+                PathBegin = osPart.Shape.PathBegin,
+            };
+        }
+
+        private MediaEntrySnapshot[] ExtractMediaEntrySnapshot(dynamic osPart)
+        {
+            dynamic mediaList = osPart.Shape.Media;
+            if (mediaList == null) return null;
+
+            MediaEntrySnapshot[] snaps = new MediaEntrySnapshot[mediaList.Count];
+            for (int i = 0; i < mediaList.Count; i++)
+            {
+                dynamic currMedia = mediaList[i];
+                snaps[i] = new MediaEntrySnapshot
+                {
+                    AutoLoop = currMedia.AutoLoop,
+                    AutoPlay = currMedia.AutoPlay,
+                    AutoScale = currMedia.AutoScale,
+                    AutoZoom = currMedia.AutoZoom,
+                    ControlPermissions = (MediaPermission)(int)currMedia.ControlPermissions,
+                    Controls = (MediaControls)(int)currMedia.Controls,
+                    CurrentURL = currMedia.CurrentURL,
+                    EnableAlterntiveImage = currMedia.EnableAlternativeImage,
+                    EnableWhiteList = currMedia.EnableWhiteList,
+                    Height = currMedia.Height,
+                    HomeURL = currMedia.HomeURL,
+                    InteractOnFirstClick = currMedia.InteractOnFirstClick,
+                    InteractPermissions = currMedia.InteractPermissions,
+                    WhiteList = currMedia.WhiteList,
+                    Width = currMedia.Width
+                };
+            }
+
+            return snaps;
         }
 
         private KeyframeAnimationSnapshot ExtractSOPKFASnapshot(dynamic osPart)
