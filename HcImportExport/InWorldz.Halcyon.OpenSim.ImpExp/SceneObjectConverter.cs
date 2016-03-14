@@ -173,7 +173,7 @@ namespace InWorldz.Halcyon.OpenSim.ImpExp
 
         private PrimShapeSnapshot ExtractSOPBaseShape(dynamic osPart)
         {
-            Tuple<RenderMaterials, Dictionary<Guid, Guid>> matsWithRemap = ExtractRenderMaterials(osPart);
+            Tuple<RenderMaterials, byte[]> matsWithRemap = ExtractRenderMaterials(osPart);
 
             return new PrimShapeSnapshot
             {
@@ -226,42 +226,47 @@ namespace InWorldz.Halcyon.OpenSim.ImpExp
                 ProjectionFocus = osPart.Shape.ProjectionFocus,
                 ProjectionTextureId = osPart.Shape.ProjectionTextureUUID.Guid,
                 RenderMaterials = matsWithRemap.Item1,
-                
+                Scale = osPart.Shape.Scale,
+                SculptEntry = osPart.Shape.SculptEntry,
+                SculptTexture = osPart.Shape.SculptTexture,
+                SculptType = osPart.Shape.SculptType,
+                State = osPart.Shape.State,
+                TextureEntry = matsWithRemap.Item2
             };
         }
 
-        private Tuple<RenderMaterials, Dictionary<Guid, Guid>>  ExtractRenderMaterials(dynamic osPart)
+        private Tuple<RenderMaterials, byte[]>  ExtractRenderMaterials(dynamic osPart)
         {
             var te = new Primitive.TextureEntry(osPart.Shape.TextureEntry, 0, osPart.Shape.TextureEntry.Length);
             var materialTextureIds = new List<Guid>();
+            var mats = new RenderMaterials();
 
             if (te.DefaultTexture != null)
             {
-                materialTextureIds.Add(te.DefaultTexture.MaterialID.Guid);
+                te.DefaultTexture.MaterialID = ExtractMaterial(te.DefaultTexture.MaterialID.Guid, mats);
             }
 
             foreach (Primitive.TextureEntryFace face in te.FaceTextures)
             {
                 if (face != null)
                 {
-                    materialTextureIds.Add(face.MaterialID.Guid);
+                    face.MaterialID = ExtractMaterial(face.MaterialID.Guid, mats);
                 }
             }
+            
+            return new Tuple<RenderMaterials, byte[]>(mats, te.GetBytes());
+        }
 
-            var mats = new RenderMaterials();
-            var matRemap = new Dictionary<Guid, Guid>();
-
-            foreach (Guid matId in materialTextureIds)
+        private UUID ExtractMaterial(Guid matId, RenderMaterials mats)
+        {
+            byte[] osdBlob = m_assetResolver.ResolveAsset(matId);
+            if (osdBlob != null)
             {
-                byte[] osdBlob = m_assetResolver.ResolveAsset(matId);
-                if (osdBlob != null)
-                {
-                    OSD osd = OSDParser.DeserializeLLSDXml(osdBlob);
-                    matRemap.Add(matId, mats.AddMaterial(RenderMaterial.FromOSD(osd)).Guid);
-                }
+                OSD osd = OSDParser.DeserializeLLSDXml(osdBlob);
+                return mats.AddMaterial(RenderMaterial.FromOSD(osd));
             }
 
-            return new Tuple<RenderMaterials, Dictionary<Guid, Guid>>(mats, matRemap);
+            return UUID.Zero;
         }
 
         private MediaEntrySnapshot[] ExtractMediaEntrySnapshot(dynamic osPart)
