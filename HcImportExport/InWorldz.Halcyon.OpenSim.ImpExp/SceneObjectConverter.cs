@@ -61,12 +61,12 @@ namespace InWorldz.Halcyon.OpenSim.ImpExp
         /// <param name="ownerOverride">Override for the embedded owner ID</param>
         public SceneObjectConverter(string openSimPath, Guid? creatorOverride = null, Guid? ownerOverride = null)
         {
-            m_creatorOverride = creatorOverride.HasValue ? creatorOverride.Value : Guid.Empty;
-            m_ownerOverride = ownerOverride.HasValue ? ownerOverride.Value : Guid.Empty;
+            m_creatorOverride = creatorOverride ?? Guid.Empty;
+            m_ownerOverride = ownerOverride ?? Guid.Empty;
 
             m_context = AppDomainContext.Create();
 
-            IAssemblyTarget tgt = m_context.LoadAssembly(LoadMethod.LoadFile, Path.Combine(openSimPath, "OpenSim.Region.Framework.dll"));
+            m_context.LoadAssembly(LoadMethod.LoadFile, Path.Combine(openSimPath, "OpenSim.Region.Framework.dll"));
             var assemblies = m_context.Domain.GetAssemblies();
             foreach (Assembly asm in assemblies)
             {
@@ -74,7 +74,7 @@ namespace InWorldz.Halcyon.OpenSim.ImpExp
                 {
                     Type t = asm.GetType("OpenSim.Region.Framework.Scenes.Serialization.SceneObjectSerializer");
 
-                    m_fromXml2Method = t.GetMethod("FromXml2Format", new Type[] { typeof(string) });
+                    m_fromXml2Method = t.GetMethod("FromXml2Format", new[] { typeof(string) });
                     if (m_fromXml2Method == null)
                     {
                         // never throw generic Exception - replace this with some other exception type
@@ -99,6 +99,8 @@ namespace InWorldz.Halcyon.OpenSim.ImpExp
             SceneObjectGroupSnapshot sshot = new SceneObjectGroupSnapshot();
             sshot.TaintedAttachment = false;
             sshot.TempAttachment = false;
+
+            sshot.RootPart = rootPartSnap;
 
             return sshot;
         }
@@ -193,7 +195,39 @@ namespace InWorldz.Halcyon.OpenSim.ImpExp
                 MediaList = ExtractMediaEntrySnapshot(osPart),
                 MidLODBytes = osPart.Shape.MidLODBytes,
                 PathBegin = osPart.Shape.PathBegin,
+                PCode = osPart.Shape.PCode,
+                PathCurve = osPart.Shape.PathCurve,
+                PathEnd = osPart.Shape.PathEnd,
+                PathRadiusOffset = osPart.Shape.PathRadiusOffset,
+                PathRevolutions = osPart.Shape.PathRevolutions,
+                PathScaleX = osPart.Shape.PathScaleX,
+                PathScaleY = osPart.Shape.PathScaleY,
+                PathShearX = osPart.Shape.PathShearX,
+                PathShearY = osPart.Shape.PathShearY,
+                PathSkew = osPart.Shape.PathSkew,
+                PathTaperX = osPart.Shape.PathTaperX,
+                PathTaperY = osPart.Shape.PathTaperY,
+                PathTwist = osPart.Shape.PathTwist,
+                PathTwistBegin = osPart.Shape.PathTwistBegin,
+                PreferredPhysicsShape = PhysicsShapeType.Prim, //TODO: Is this supported on OS? 
+                ProfileBegin = osPart.Shape.ProfileBegin,
+                ProfileCurve = osPart.Shape.ProfileCurve,
+                ProfileEnd = osPart.Shape.ProfileEnd,
+                ProfileHollow = osPart.Shape.ProfileHollow,
+                ProfileShape = osPart.Shape.ProfileShape,
+                ProjectionAmbiance = osPart.Shape.ProjectionAmbiance,
+                ProjectionEntry = osPart.Shape.ProjectionEntry,
+                ProjectionFOV = osPart.Shape.ProjectionFOV,
+                ProjectionFocus = osPart.Shape.ProjectionFocus,
+                ProjectionTextureId = osPart.Shape.ProjectionTextureUUID.Guid,
+                RenderMaterials = ExtractRenderMaterials(osPart),
+                
             };
+        }
+
+        private RenderMaterials ExtractRenderMaterials(dynamic osPart)
+        {
+            throw new NotImplementedException();
         }
 
         private MediaEntrySnapshot[] ExtractMediaEntrySnapshot(dynamic osPart)
