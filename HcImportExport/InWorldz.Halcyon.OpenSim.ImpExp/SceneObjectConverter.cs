@@ -37,6 +37,7 @@ using System.Reflection;
 using OpenMetaverse;
 using OpenSim.Framework;
 using System.Collections.Generic;
+using OpenMetaverse.StructuredData;
 
 namespace InWorldz.Halcyon.OpenSim.ImpExp
 {
@@ -45,6 +46,7 @@ namespace InWorldz.Halcyon.OpenSim.ImpExp
     /// </summary>
     public class SceneObjectConverter : System.IDisposable
     {
+        private IAssetResolver m_assetResolver;
         private AppDomainContext<AssemblyTargetLoader, PathBasedAssemblyResolver> m_context;
 
         private MethodInfo m_fromXml2Method;
@@ -59,8 +61,9 @@ namespace InWorldz.Halcyon.OpenSim.ImpExp
         /// <param name="openSimPath">The path to a vanilla opensim bin directory</param>
         /// <param name="creatorOverride">Override for the embedded creator ID</param>
         /// <param name="ownerOverride">Override for the embedded owner ID</param>
-        public SceneObjectConverter(string openSimPath, Guid? creatorOverride = null, Guid? ownerOverride = null)
+        public SceneObjectConverter(string openSimPath, IAssetResolver ar, Guid? creatorOverride = null, Guid? ownerOverride = null)
         {
+            m_assetResolver = ar;
             m_creatorOverride = creatorOverride ?? Guid.Empty;
             m_ownerOverride = ownerOverride ?? Guid.Empty;
 
@@ -170,6 +173,8 @@ namespace InWorldz.Halcyon.OpenSim.ImpExp
 
         private PrimShapeSnapshot ExtractSOPBaseShape(dynamic osPart)
         {
+            Tuple<RenderMaterials, Dictionary<Guid, Guid>> matsWithRemap = ExtractRenderMaterials(osPart);
+
             return new PrimShapeSnapshot
             {
                 ExtraParams = osPart.Shape.ExtraParams,
@@ -220,14 +225,43 @@ namespace InWorldz.Halcyon.OpenSim.ImpExp
                 ProjectionFOV = osPart.Shape.ProjectionFOV,
                 ProjectionFocus = osPart.Shape.ProjectionFocus,
                 ProjectionTextureId = osPart.Shape.ProjectionTextureUUID.Guid,
-                RenderMaterials = ExtractRenderMaterials(osPart),
+                RenderMaterials = matsWithRemap.Item1,
                 
             };
         }
 
-        private RenderMaterials ExtractRenderMaterials(dynamic osPart)
+        private Tuple<RenderMaterials, Dictionary<Guid, Guid>>  ExtractRenderMaterials(dynamic osPart)
         {
-            throw new NotImplementedException();
+            var te = new Primitive.TextureEntry(osPart.Shape.TextureEntry, 0, osPart.Shape.TextureEntry.Length);
+            var materialTextureIds = new List<Guid>();
+
+            if (te.DefaultTexture != null)
+            {
+                materialTextureIds.Add(te.DefaultTexture.MaterialID.Guid);
+            }
+
+            foreach (Primitive.TextureEntryFace face in te.FaceTextures)
+            {
+                if (face != null)
+                {
+                    materialTextureIds.Add(face.MaterialID.Guid);
+                }
+            }
+
+            var mats = new RenderMaterials();
+            var matRemap = new Dictionary<Guid, Guid>();
+
+            foreach (Guid matId in materialTextureIds)
+            {
+                byte[] osdBlob = m_assetResolver.ResolveAsset(matId);
+                if (osdBlob != null)
+                {
+                    OSD osd = OSDParser.DeserializeLLSDXml(osdBlob);
+                    matRemap.Add(matId, mats.AddMaterial(RenderMaterial.FromOSD(osd)).Guid);
+                }
+            }
+
+            return new Tuple<RenderMaterials, Dictionary<Guid, Guid>>(mats, matRemap);
         }
 
         private MediaEntrySnapshot[] ExtractMediaEntrySnapshot(dynamic osPart)
