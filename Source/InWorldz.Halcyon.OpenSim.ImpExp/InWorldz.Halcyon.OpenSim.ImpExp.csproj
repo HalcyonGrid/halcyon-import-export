@@ -16,7 +16,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
+    <OutputPath>..\..\bin\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -24,7 +24,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
+    <OutputPath>..\..\bin\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -54,18 +54,6 @@
     </Reference>
     <Reference Include="InWorldz.Region.Data.Thoosa">
       <HintPath>..\..\..\halcyon\bin\InWorldz.Region.Data.Thoosa.dll</HintPath>
-    </Reference>
-    <Reference Include="OpenMetaverse, Version=0.0.0.28165, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\halcyon\bin\OpenMetaverse.dll</HintPath>
-    </Reference>
-    <Reference Include="OpenMetaverse.StructuredData, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\halcyon\bin\OpenMetaverse.StructuredData.dll</HintPath>
-    </Reference>
-    <Reference Include="OpenMetaverseTypes, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\halcyon\bin\OpenMetaverseTypes.dll</HintPath>
     </Reference>
     <Reference Include="OpenSim.Framework, Version=0.6.5.31174, Culture=neutral, processorArchitecture=AMD64">
       <SpecificVersion>False</SpecificVersion>

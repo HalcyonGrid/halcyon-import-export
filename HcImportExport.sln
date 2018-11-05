@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InWorldz.Halcyon.OpenSim.ImpExp", "InWorldz.Halcyon.OpenSim.ImpExp\InWorldz.Halcyon.OpenSim.ImpExp.csproj", "{9683B2E3-80CD-4321-9E64-1BA2968A1892}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InWorldz.Halcyon.OpenSim.ImpExp", "Source\InWorldz.Halcyon.OpenSim.ImpExp\InWorldz.Halcyon.OpenSim.ImpExp.csproj", "{9683B2E3-80CD-4321-9E64-1BA2968A1892}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "hc-import", "hc-import\hc-import.csproj", "{D2CBD3D5-F7A8-4E71-A58E-071382879B8B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "hc-import", "Source\hc-import\hc-import.csproj", "{D2CBD3D5-F7A8-4E71-A58E-071382879B8B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
