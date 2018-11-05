@@ -1,0 +1,40 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28010.2048
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InWorldz.Halcyon.OpenSim.ImpExp", "Source\InWorldz.Halcyon.OpenSim.ImpExp\InWorldz.Halcyon.OpenSim.ImpExp.csproj", "{9683B2E3-80CD-4321-9E64-1BA2968A1892}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "hc-import", "Source\hc-import\hc-import.csproj", "{D2CBD3D5-F7A8-4E71-A58E-071382879B8B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{290A21F2-BAA6-42DE-97A0-A32946E30CF0}"
+	ProjectSection(SolutionItems) = preProject
+		.appveyor.yml = .appveyor.yml
+		.gitattributes = .gitattributes
+		.gitignore = .gitignore
+		LICENSE = LICENSE
+		README.md = README.md
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Release|x64 = Release|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9683B2E3-80CD-4321-9E64-1BA2968A1892}.Debug|x64.ActiveCfg = Debug|x64
+		{9683B2E3-80CD-4321-9E64-1BA2968A1892}.Debug|x64.Build.0 = Debug|x64
+		{9683B2E3-80CD-4321-9E64-1BA2968A1892}.Release|x64.ActiveCfg = Release|x64
+		{9683B2E3-80CD-4321-9E64-1BA2968A1892}.Release|x64.Build.0 = Release|x64
+		{D2CBD3D5-F7A8-4E71-A58E-071382879B8B}.Debug|x64.ActiveCfg = Debug|x64
+		{D2CBD3D5-F7A8-4E71-A58E-071382879B8B}.Debug|x64.Build.0 = Debug|x64
+		{D2CBD3D5-F7A8-4E71-A58E-071382879B8B}.Release|x64.ActiveCfg = Release|x64
+		{D2CBD3D5-F7A8-4E71-A58E-071382879B8B}.Release|x64.Build.0 = Release|x64
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D16A6E81-EA2F-4A74-9AE9-E61F540783A8}
+	EndGlobalSection
+EndGlobal
